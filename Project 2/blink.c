@@ -4,18 +4,21 @@
 /**
  * blink.c
  */
-void main(void)
-{
-    volatile int i; //Force the compliler to not optimize the variable 'i'
-        WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
-        P1DIR|=BIT0|BIT6; //Set P1.0 and P1.6 as output pin
-        while(1) //Keep toggling the LEDs forever
-        {
-            P1OUT|=BIT0; //Turn on red LED
-            P1OUT&=~BIT6; //Turn off green LED
-            for(i=10000;i>0;i--); //Delay
-            P1OUT|=BIT6; //Turn on green LED
-            P1OUT&=~BIT0; //Turn off red LED
-            for(i=10000;i>0;i--); //Delay
-        }
+int main(void) {
+
+    WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
+    P1DIR&=~BIT3; //Set P1.3 as input
+    P1REN|=BIT3; //Enable pullup/pulldown resistors for P1.3
+    P1OUT|=BIT3; //Set P1.3 to have pull up resistors
+
+    P1DIR|=BIT0; //Set P1.0 as output
+
+    while(1) //Run the below code forever
+    {
+        if((P1IN&BIT3)==(BIT3)) //If P1.3 is logical HIGH
+            P1OUT&=~BIT0; //Turn off the LED
+        else
+            P1OUT|=BIT0; //Else, turn on the LED
+    }
+    return 0;
 }
