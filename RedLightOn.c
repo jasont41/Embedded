@@ -12,5 +12,6 @@ int main(void) {
     {
         P1OUT|=BIT0; //Turn on red LED
     }
+    
     return 0;
 }
